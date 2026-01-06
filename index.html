@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculadora de Presupuesto para Ebanistería en República Dominicana - Cotizador profesional en RD$">
+    <title>Cotizador de Ebanistería - RD$ | Presupuesto Profesional</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Color Palette - Wood Theme */
+            --primary: #5d4037;
+            --primary-dark: #3e2723;
+            --primary-light: #8d6e63;
+            --secondary: #d7ccc8;
+            --accent: #a1887f;
+            --accent-gold: #d4a855;
+            
+            /* Backgrounds */
+            --bg-main: #faf8f5;
+            --bg-card: #ffffff;
+            --bg-section: #f5f0eb;
+            
+            /* Text Colors */
+            --text-primary: #2c1810;
+            --text-secondary: #5d4037;
+            --text-muted: #8d6e63;
+            
+            /* Status Colors */
+            --success: #4caf50;
+            --warning: #ff9800;
+            --danger: #e53935;
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(93, 64, 55, 0.08);
+            --shadow-md: 0 4px 20px rgba(93, 64, 55, 0.12);
+            --shadow-lg: 0 8px 40px rgba(93, 64, 55, 0.16);
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            
+            /* Transitions */
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.25s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-main) 0%, var(--bg-section) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 24px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent-gold), var(--primary-light));
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .header-subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 28px;
+            padding: 24px;
+            background: var(--bg-section);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(93, 64, 55, 0.08);
+            transition: box-shadow var(--transition-normal);
+        }
+
+        .section:hover {
+            box-shadow: var(--shadow-sm);
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, var(--accent-gold), var(--primary-light));
+            border-radius: 2px;
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            padding: 10px 14px;
+            background: rgba(212, 168, 85, 0.1);
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--accent-gold);
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 16px;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        th:first-child {
+            border-radius: var(--radius-sm) 0 0 0;
+        }
+
+        th:last-child {
+            border-radius: 0 var(--radius-sm) 0 0;
+        }
+
+        td {
+            padding: 12px 16px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--secondary);
+            vertical-align: middle;
+        }
+
+        tr:last-child td:first-child {
+            border-radius: 0 0 0 var(--radius-sm);
+        }
+
+        tr:last-child td:last-child {
+            border-radius: 0 0 var(--radius-sm) 0;
+        }
+
+        tr:hover td {
+            background: rgba(93, 64, 55, 0.02);
+        }
+
+        /* Input Styles */
+        input[type="number"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid var(--secondary);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            background: var(--bg-card);
+            transition: all var(--transition-fast);
+        }
+
+        input[type="number"]:focus,
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(93, 64, 55, 0.1);
+        }
+
+        input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Subtotal Cell */
+        .subtotal {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #388e3c 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%);
+            color: white;
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+        }
+
+        .btn-danger:hover {
+            background: #c62828;
+        }
+
+        /* Grid Layout for Labor Section */
+        .labor-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .labor-grid label {
+            display: block;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Totals Panel */
+        .totals-panel {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: white;
+            padding: 28px;
+            border-radius: var(--radius-md);
+            margin-top: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .totals-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .total-row:last-child {
+            border-bottom: none;
+        }
+
+        .total-row span:first-child {
+            opacity: 0.9;
+        }
+
+        .total-row span:last-child {
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .grand-total {
+            font-size: 1.4rem !important;
+            padding-top: 16px !important;
+            margin-top: 8px;
+            border-top: 2px solid rgba(255,255,255,0.2) !important;
+            border-bottom: none !important;
+        }
+
+        .grand-total span:last-child {
+            font-size: 1.6rem !important;
+            color: var(--accent-gold);
+        }
+
+        /* Export Buttons */
+        .export-section {
+            text-align: center;
+            margin-top: 28px;
+            padding-top: 24px;
+            border-top: 2px solid var(--secondary);
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        /* Material Selector */
+        .material-selector {
+            margin-bottom: 16px;
+            padding: 16px;
+            background: rgba(212, 168, 85, 0.08);
+            border-radius: var(--radius-sm);
+            display: flex;
+            gap: 16px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .material-selector > div {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .material-selector label {
+            display: block;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .labor-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 10px 8px;
+            }
+
+            .export-section {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+
+            .btn, .export-section, .material-selector {
+                display: none !important;
+            }
+
+            .section {
+                break-inside: avoid;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .section:nth-child(2) { animation-delay: 0.1s; }
+        .section:nth-child(3) { animation-delay: 0.2s; }
+        .section:nth-child(4) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🪵 Cotizador de Ebanistería</h1>
+        <p class="header-subtitle">Sistema de Presupuestación Profesional en RD$</p>
+    </div>
+
+    <div class="section">
+        <h2>Madera Maciza (Pies Tablares)</h2>
+        <p class="help-text">💡 Fórmula: (Grosor" × Ancho" × Largo") ÷ 12 = Pies Tablares</p>
+        
+        <div class="material-selector">
+            <div>
+                <label for="woodType">Tipo de Madera</label>
+                <select id="woodType" onchange="updateWoodPrice()">
+                    <option value="">-- Seleccionar --</option>
+                    <option value="caoba" data-price="85">Caoba Fiji KD (RD$85/pie)</option>
+                    <option value="roble" data-price="65">Roble Americano (RD$65/pie)</option>
+                    <option value="cedro" data-price="22">Cedro (RD$22/pie)</option>
+                    <option value="pino" data-price="18">Pino Tratado (RD$18/pie)</option>
+                    <option value="custom">Precio Personalizado</option>
+                </select>
+            </div>
+            <div>
+                <label for="defaultWoodPrice">Precio por Pie (RD$)</label>
+                <input type="number" id="defaultWoodPrice" value="85" oninput="calcular()">
+            </div>
+        </div>
+
+        <table id="tablaMadera">
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Pies Tablares</th>
+                    <th>Precio x Pie (RD$)</th>
+                    <th>Total</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" placeholder="Ej: Caoba para tablero"></td>
+                    <td><input type="number" class="qty" value="0" min="0" step="0.1" oninput="calcular()"></td>
+                    <td><input type="number" class="price" value="85" min="0" oninput="calcular()"></td>
+                    <td class="subtotal">RD$ 0.00</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-primary" onclick="agregarFila('tablaMadera', 'madera')">
+            <span>+</span> Agregar Madera
+        </button>
+    </div>
+
+    <div class="section">
+        <h2>Herrajes y Terminación</h2>
+        
+        <div class="material-selector">
+            <div>
+                <label for="materialType">Agregar Material Rápido</label>
+                <select id="materialType">
+                    <option value="">-- Seleccionar Material --</option>
+                    <optgroup label="Adhesivos">
+                        <option value="Cola Blanca Lanco|481">Cola Blanca Lanco (Galón) - RD$481</option>
+                        <option value="Cola Amarilla|1820">Cola Amarilla Bond 3 (Galón) - RD$1,820</option>
+                        <option value="Ega Líquida Aica|465">Ega Líquida Aica (Galón) - RD$465</option>
+                    </optgroup>
+                    <optgroup label="Lacas y Acabados">
+                        <option value="Laca Natural A1|1394">Laca Natural A1 Brillo (Galón) - RD$1,394</option>
+                        <option value="Laca Blanca Dupont|1861">Laca Blanca Dupont (Galón) - RD$1,861</option>
+                        <option value="Laca Amarillo Cromo|3200">Laca Amarillo Cromo S.W. (Galón) - RD$3,200</option>
+                    </optgroup>
+                    <optgroup label="Herrajes">
+                        <option value="Bisagra Cangrejo|2132">Bisagra Cangrejo Negra Becusa - RD$2,132</option>
+                        <option value="Corredera 18''|850">Corredera 18'' - RD$850</option>
+                        <option value="Tirador Acero|150">Tirador Acero Inox - RD$150</option>
+                    </optgroup>
+                    <optgroup label="Otros">
+                        <option value="Masilla Madetec|415">Masilla Madetec (1/4 Galón) - RD$415</option>
+                        <option value="Lija #120|25">Lija #120 - RD$25</option>
+                        <option value="Lija #220|30">Lija #220 - RD$30</option>
+                    </optgroup>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="agregarMaterialRapido()">
+                <span>+</span> Agregar
+            </button>
+        </div>
+
+        <table id="tablaMateriales">
+            <thead>
+                <tr>
+                    <th>Material</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unit. (RD$)</th>
+                    <th>Total</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="text" placeholder="Ej: Barniz, Cola, Lija"></td>
+                    <td><input type="number" class="qty" value="0" min="0" oninput="calcular()"></td>
+                    <td><input type="number" class="price" value="0" min="0" oninput="calcular()"></td>
+                    <td class="subtotal">RD$ 0.00</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-primary" onclick="agregarFila('tablaMateriales', 'material')">
+            <span>+</span> Agregar Insumo
+        </button>
+    </div>
+
+    <div class="section">
+        <h2>Mano de Obra y Ganancia</h2>
+        <div class="labor-grid">
+            <div>
+                <label for="manoObra">Mano de Obra Directa (RD$)</label>
+                <input type="number" id="manoObra" value="0" min="0" oninput="calcular()">
+            </div>
+            <div>
+                <label for="margen">Margen de Beneficio (%)</label>
+                <input type="number" id="margen" value="30" min="0" max="100" oninput="calcular()">
+            </div>
+        </div>
+    </div>
+
+    <div class="totals-panel">
+        <div class="total-row">
+            <span>Costo Total de Materiales:</span>
+            <span id="resMateriales">RD$ 0.00</span>
+        </div>
+        <div class="total-row">
+            <span>Mano de Obra:</span>
+            <span id="resManoObra">RD$ 0.00</span>
+        </div>
+        <div class="total-row">
+            <span>Subtotal Costo:</span>
+            <span id="resSubtotal">RD$ 0.00</span>
+        </div>
+        <div class="total-row">
+            <span>Margen de Ganancia:</span>
+            <span id="resGanancia">RD$ 0.00</span>
+        </div>
+        <div class="total-row grand-total">
+            <span>PRECIO FINAL SUGERIDO:</span>
+            <span id="resTotal">RD$ 0.00</span>
+        </div>
+    </div>
+
+    <div class="export-section">
+        <button class="btn btn-success" onclick="exportarPDF()">
+            📄 Exportar PDF
+        </button>
+        <button class="btn btn-info" onclick="exportarExcel()">
+            📊 Exportar Excel
+        </button>
+        <button class="btn btn-primary" onclick="window.print()">
+            🖨️ Imprimir
+        </button>
+    </div>
+</div>
+
+<!-- jsPDF Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
+
+<!-- SheetJS Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script>
+    // ==========================================
+    // STORAGE FUNCTIONS
+    // ==========================================
+    
+    function guardarDatos() {
+        const datos = {
+            manoObra: document.getElementById('manoObra').value,
+            margen: document.getElementById('margen').value,
+            defaultWoodPrice: document.getElementById('defaultWoodPrice').value,
+            timestamp: new Date().toISOString()
+        };
+        localStorage.setItem('cotizadorEbanisteria', JSON.stringify(datos));
+    }
+
+    function cargarDatos() {
+        const datos = localStorage.getItem('cotizadorEbanisteria');
+        if (datos) {
+            const parsed = JSON.parse(datos);
+            document.getElementById('manoObra').value = parsed.manoObra || 0;
+            document.getElementById('margen').value = parsed.margen || 30;
+            document.getElementById('defaultWoodPrice').value = parsed.defaultWoodPrice || 85;
+        }
+    }
+
+    // ==========================================
+    // WOOD PRICE UPDATE
+    // ==========================================
+    
+    function updateWoodPrice() {
+        const select = document.getElementById('woodType');
+        const priceInput = document.getElementById('defaultWoodPrice');
+        const selectedOption = select.options[select.selectedIndex];
+        
+        if (selectedOption.dataset.price) {
+            priceInput.value = selectedOption.dataset.price;
+            calcular();
+        }
+    }
+
+    // ==========================================
+    // TABLE FUNCTIONS
+    // ==========================================
+    
+    function agregarFila(idTabla, tipo) {
+        const tabla = document.getElementById(idTabla).getElementsByTagName('tbody')[0];
+        const nuevaFila = tabla.insertRow();
+        const defaultPrice = tipo === 'madera' ? document.getElementById('defaultWoodPrice').value : 0;
+        
+        nuevaFila.innerHTML = `
+            <td><input type="text" placeholder="${tipo === 'madera' ? 'Descripción madera' : 'Descripción material'}"></td>
+            <td><input type="number" class="qty" value="0" min="0" step="${tipo === 'madera' ? '0.1' : '1'}" oninput="calcular()"></td>
+            <td><input type="number" class="price" value="${defaultPrice}" min="0" oninput="calcular()"></td>
+            <td class="subtotal">RD$ 0.00</td>
+            <td><button class="btn btn-danger" onclick="eliminarFila(this)">✕</button></td>
+        `;
+        
+        nuevaFila.style.animation = 'fadeIn 0.3s ease forwards';
+    }
+
+    function agregarMaterialRapido() {
+        const select = document.getElementById('materialType');
+        if (!select.value) return;
+        
+        const [nombre, precio] = select.value.split('|');
+        const tabla = document.getElementById('tablaMateriales').getElementsByTagName('tbody')[0];
+        const nuevaFila = tabla.insertRow();
+        
+        nuevaFila.innerHTML = `
+            <td><input type="text" value="${nombre}"></td>
+            <td><input type="number" class="qty" value="1" min="0" oninput="calcular()"></td>
+            <td><input type="number" class="price" value="${precio}" min="0" oninput="calcular()"></td>
+            <td class="subtotal">RD$ ${parseFloat(precio).toLocaleString('en-US', {minimumFractionDigits: 2})}</td>
+            <td><button class="btn btn-danger" onclick="eliminarFila(this)">✕</button></td>
+        `;
+        
+        nuevaFila.style.animation = 'fadeIn 0.3s ease forwards';
+        select.value = '';
+        calcular();
+    }
+
+    function eliminarFila(btn) {
+        const fila = btn.closest('tr');
+        fila.style.animation = 'fadeIn 0.2s ease reverse';
+        setTimeout(() => {
+            fila.remove();
+            calcular();
+        }, 200);
+    }
+
+    // ==========================================
+    // CALCULATION FUNCTIONS
+    // ==========================================
+    
+    function calcular() {
+        let totalMateriales = 0;
+
+        const filas = document.querySelectorAll('tbody tr');
+        filas.forEach(fila => {
+            const qty = fila.querySelector('.qty');
+            const price = fila.querySelector('.price');
+            const subtotalCell = fila.querySelector('.subtotal');
+
+            if (qty && price && subtotalCell) {
+                const sub = parseFloat(qty.value || 0) * parseFloat(price.value || 0);
+                subtotalCell.innerText = 'RD$ ' + sub.toLocaleString('en-US', {minimumFractionDigits: 2});
+                totalMateriales += sub;
+            }
+        });
+
+        const manoObra = parseFloat(document.getElementById('manoObra').value || 0);
+        const margenPorcentaje = parseFloat(document.getElementById('margen').value || 0) / 100;
+        
+        const subtotalCosto = totalMateriales + manoObra;
+        const ganancia = subtotalCosto * margenPorcentaje;
+        const totalFinal = subtotalCosto + ganancia;
+
+        document.getElementById('resMateriales').innerText = "RD$ " + totalMateriales.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('resManoObra').innerText = "RD$ " + manoObra.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('resSubtotal').innerText = "RD$ " + subtotalCosto.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('resGanancia').innerText = "RD$ " + ganancia.toLocaleString('en-US', {minimumFractionDigits: 2});
+        document.getElementById('resTotal').innerText = "RD$ " + totalFinal.toLocaleString('en-US', {minimumFractionDigits: 2});
+
+        guardarDatos();
+    }
+
+    // ==========================================
+    // EXPORT FUNCTIONS
+    // ==========================================
+    
+    function getTableData(tableId) {
+        const data = [];
+        const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+        
+        rows.forEach(row => {
+            const desc = row.querySelector('input[type="text"]')?.value || '';
+            const qty = parseFloat(row.querySelector('.qty')?.value || 0);
+            const price = parseFloat(row.querySelector('.price')?.value || 0);
+            const subtotal = qty * price;
+            
+            if (desc || qty > 0 || price > 0) {
+                data.push({
+                    descripcion: desc,
+                    cantidad: qty,
+                    precio: price,
+                    subtotal: subtotal
+                });
+            }
+        });
+        
+        return data;
+    }
+
+    function exportarPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        const fecha = new Date().toLocaleDateString('es-DO', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        
+        // Header
+        doc.setFontSize(20);
+        doc.setTextColor(93, 64, 55);
+        doc.text('Cotización de Ebanistería', 105, 20, { align: 'center' });
+        
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text(`Fecha: ${fecha}`, 105, 28, { align: 'center' });
+        doc.text(`Cotización #${Date.now().toString().slice(-6)}`, 105, 34, { align: 'center' });
+        
+        let yPos = 45;
+        
+        // Madera Section
+        const maderaData = getTableData('tablaMadera');
+        if (maderaData.length > 0) {
+            doc.setFontSize(12);
+            doc.setTextColor(93, 64, 55);
+            doc.text('Madera Maciza', 14, yPos);
+            yPos += 5;
+            
+            doc.autoTable({
+                startY: yPos,
+                head: [['Descripción', 'Pies Tablares', 'Precio/Pie', 'Total']],
+                body: maderaData.map(item => [
+                    item.descripcion,
+                    item.cantidad.toFixed(2),
+                    'RD$ ' + item.precio.toLocaleString('en-US', {minimumFractionDigits: 2}),
+                    'RD$ ' + item.subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})
+                ]),
+                theme: 'striped',
+                headStyles: { fillColor: [93, 64, 55] }
+            });
+            
+            yPos = doc.lastAutoTable.finalY + 10;
+        }
+        
+        // Materials Section
+        const materialesData = getTableData('tablaMateriales');
+        if (materialesData.length > 0) {
+            doc.setFontSize(12);
+            doc.setTextColor(93, 64, 55);
+            doc.text('Herrajes y Terminación', 14, yPos);
+            yPos += 5;
+            
+            doc.autoTable({
+                startY: yPos,
+                head: [['Material', 'Cantidad', 'Precio Unit.', 'Total']],
+                body: materialesData.map(item => [
+                    item.descripcion,
+                    item.cantidad,
+                    'RD$ ' + item.precio.toLocaleString('en-US', {minimumFractionDigits: 2}),
+                    'RD$ ' + item.subtotal.toLocaleString('en-US', {minimumFractionDigits: 2})
+                ]),
+                theme: 'striped',
+                headStyles: { fillColor: [93, 64, 55] }
+            });
+            
+            yPos = doc.lastAutoTable.finalY + 10;
+        }
+        
+        // Totals
+        const totals = [
+            ['Costo Total de Materiales:', document.getElementById('resMateriales').innerText],
+            ['Mano de Obra:', document.getElementById('resManoObra').innerText],
+            ['Subtotal Costo:', document.getElementById('resSubtotal').innerText],
+            ['Margen de Ganancia:', document.getElementById('resGanancia').innerText],
+            ['PRECIO FINAL:', document.getElementById('resTotal').innerText]
+        ];
+        
+        doc.autoTable({
+            startY: yPos,
+            body: totals,
+            theme: 'plain',
+            styles: { fontSize: 11 },
+            columnStyles: {
+                0: { fontStyle: 'bold', cellWidth: 80 },
+                1: { halign: 'right', cellWidth: 60 }
+            },
+            didParseCell: function(data) {
+                if (data.row.index === 4) {
+                    data.cell.styles.fillColor = [93, 64, 55];
+                    data.cell.styles.textColor = [255, 255, 255];
+                    data.cell.styles.fontStyle = 'bold';
+                    data.cell.styles.fontSize = 12;
+                }
+            }
+        });
+        
+        // Footer
+        const pageHeight = doc.internal.pageSize.height;
+        doc.setFontSize(8);
+        doc.setTextColor(150);
+        doc.text('Cotización generada automáticamente - Sistema de Presupuesto Ebanistería RD', 105, pageHeight - 10, { align: 'center' });
+        
+        doc.save(`cotizacion_${Date.now()}.pdf`);
+    }
+
+    function exportarExcel() {
+        const wb = XLSX.utils.book_new();
+        
+        // Madera Sheet
+        const maderaData = getTableData('tablaMadera');
+        if (maderaData.length > 0) {
+            const wsData = [
+                ['Descripción', 'Pies Tablares', 'Precio por Pie (RD$)', 'Total (RD$)'],
+                ...maderaData.map(item => [item.descripcion, item.cantidad, item.precio, item.subtotal])
+            ];
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            XLSX.utils.book_append_sheet(wb, ws, 'Madera');
+        }
+        
+        // Materiales Sheet
+        const materialesData = getTableData('tablaMateriales');
+        if (materialesData.length > 0) {
+            const wsData = [
+                ['Material', 'Cantidad', 'Precio Unitario (RD$)', 'Total (RD$)'],
+                ...materialesData.map(item => [item.descripcion, item.cantidad, item.precio, item.subtotal])
+            ];
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            XLSX.utils.book_append_sheet(wb, ws, 'Materiales');
+        }
+        
+        // Resumen Sheet
+        const resumenData = [
+            ['RESUMEN DE COTIZACIÓN'],
+            [''],
+            ['Concepto', 'Monto (RD$)'],
+            ['Costo Total de Materiales', parseFloat(document.getElementById('resMateriales').innerText.replace(/[^\d.-]/g, ''))],
+            ['Mano de Obra', parseFloat(document.getElementById('resManoObra').innerText.replace(/[^\d.-]/g, ''))],
+            ['Subtotal Costo', parseFloat(document.getElementById('resSubtotal').innerText.replace(/[^\d.-]/g, ''))],
+            ['Margen de Ganancia', parseFloat(document.getElementById('resGanancia').innerText.replace(/[^\d.-]/g, ''))],
+            ['PRECIO FINAL', parseFloat(document.getElementById('resTotal').innerText.replace(/[^\d.-]/g, ''))],
+            [''],
+            ['Fecha:', new Date().toLocaleDateString('es-DO')]
+        ];
+        const wsResumen = XLSX.utils.aoa_to_sheet(resumenData);
+        XLSX.utils.book_append_sheet(wb, wsResumen, 'Resumen');
+        
+        XLSX.writeFile(wb, `cotizacion_${Date.now()}.xlsx`);
+    }
+
+    // ==========================================
+    // INITIALIZATION
+    // ==========================================
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        cargarDatos();
+        calcular();
+    });
+</script>
+
+</body>
+</html>
